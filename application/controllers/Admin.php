@@ -29,7 +29,35 @@ class Admin extends CI_Controller {
   // KATEGORI
 	public function data_kategori()
 	{
-		$this->template_backend->view('admin/data_kategori');
+		$this->load->library('pagination');
+
+		$config['base_url'] 				= base_url().'kategori';
+		$config['total_rows'] 			= $this->M_admin->count_kategori();
+		$config['per_page'] 				= 5;
+
+		$config['full_tag_open'] 		= '<nav class="w-100 d-flex justify-content-center align-items-center mb-0" aria-label="Page navigation example"><ul class="pagination justify-content-center pagination-sm">';
+		$config['full_tag_close'] 	= '</ul></nav>';
+
+		$config['next_link'] 				= '&raquo';
+		$config['next_tag_open'] 		= '<li class="page-item">';
+		$config['next_tag_close'] 	= '</li>';
+
+		$config['prev_link'] 				= '&laquo';
+		$config['prev_tag_open'] 		= '<li class="page-item">';
+		$config['prev_tag_close'] 	= '</li>';
+
+		$config['cur_tag_open'] 		= '<li class="page-item active"><a class="page-link" href="#">';
+		$config['cur_tag_close'] 		= '<span class="sr-only">(current)</span></a></li>';
+
+		$config['num_tag_open'] 		= '<li class="page-item">';
+		$config['num_tag_close'] 		= '</li>';
+
+		$config['attributes']				= array('class' => 'page-link');
+
+		$this->pagination->initialize($config);
+		$data['kategori']						= $this->M_admin->get_kategoriTable((empty($this->uri->segment(2)) ? 0 : $this->uri->segment(2)), $config['per_page']);
+
+		$this->template_backend->view('admin/data_kategori', $data);
 	}
 
 	function tambah_kategori(){
@@ -37,7 +65,7 @@ class Admin extends CI_Controller {
 			$this->session->set_flashdata('success', 'Berhasil menambahkan kategori !');
 			redirect($this->agent->referrer());
 		}else{
-			$this->session->set_flashdata('error', 'Terjadi kesalahan saat enambahkan kategori !');
+			$this->session->set_flashdata('error', 'Terjadi kesalahan saat menambahkan kategori !');
 			redirect($this->agent->referrer());
 		}
 	}
@@ -47,12 +75,12 @@ class Admin extends CI_Controller {
 			$this->session->set_flashdata('success', 'Berhasil mengubah kategori !');
 			redirect($this->agent->referrer());
 		}else{
-			$this->session->set_flashdata('error', 'Terjadi kesalahan saat mengubah kategorit !');
+			$this->session->set_flashdata('error', 'Tidak ada perubahan pada kategori !');
 			redirect($this->agent->referrer());
 		}
 	}
 
-	function hapus_kategori($id_kategori){
+	function hapus_kategori($id_kategori = null){
 		if ($this->M_admin->hapus_kategori($id_kategori) == TRUE){
 			$this->session->set_flashdata('success', 'Berhasil menghapus kategori !');
 			redirect($this->agent->referrer());
