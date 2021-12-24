@@ -11,7 +11,14 @@ class Authentication extends CI_Controller {
 	
 	public function index()
 	{
+		if($this->session->userdata('logged_in') == true || $this->session->userdata('logged_in'))
+		{
+			$this->session->set_flashdata('warning', 'Anda telah masuk kedalam akun anda !');
+			redirect(site_url('dashboard'));
+		}else
+		{
 			$this->load->view('masuk');
+		}
 	}
 	
 	public function proses_masuk(){
