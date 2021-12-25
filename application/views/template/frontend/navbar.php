@@ -13,7 +13,11 @@
       </li>
     </ul>
     <div class="my-2 my-lg-0">
-      <a class="btn btn-outline-success my-2 my-sm-0" href="<?= site_url('masuk');?>">Masuk</a>
+      <?php if($this->session->userdata('logged_in') == true){?>
+        <a class="nav-link text-white my-2 my-sm-0" href="<?= site_url('dashboard');?>"><?= $this->session->userdata('nama');?></a>
+      <?php }else{?>
+        <a class="btn btn-outline-success my-2 my-sm-0" href="<?= site_url('masuk');?>">Masuk</a>
+      <?php }?>
     </div>
   </div>
 </nav>

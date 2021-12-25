@@ -13,11 +13,19 @@
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="<?= base_url();?>assets/css/bootstrap.min.css">
 
+  <!-- select2 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 	<!-- custom css -->
 	<link rel="stylesheet" href="<?= base_url();?>assets/css/custom-backend.css?<?= time();?>">
 
+  <!-- JQUERY -->
+
 	<!-- main jquery -->
   <script src="<?= base_url();?>assets/js/jquery-3.6.0.js"></script>
+
+  <!-- ckeditor -->
+  <script src="<?= base_url('assets/js/plugin/ckeditor/ckeditor.js') ?>"></script>
 
   <!-- Sweetalert -->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
