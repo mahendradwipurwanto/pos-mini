@@ -22,9 +22,9 @@
         </h6>
         <ul class="nav flex-column mb-2">
           <li class="nav-item">
-            <a class="nav-link <?= ($this->uri->segment(1) == "produk" ? "active" : "") ?>" href="<?= site_url('produk');?>">
+            <a class="nav-link <?= ($this->uri->segment(1) == "produk" || $this->uri->segment(1) == "tambah-produk" || $this->uri->segment(1) == "edit-produk" ? "active" : "") ?>" href="<?= site_url('produk');?>">
               <span data-feather="file-text"></span>
-              Produk
+              Data Produk
             </a>
           </li>
         </ul>

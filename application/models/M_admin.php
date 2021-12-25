@@ -43,14 +43,14 @@ class M_admin extends CI_Model {
 			'kategori' 		=> $kategori,
 			'keterangan' 	=> $keterangan,
 		);
-
+		
 		$this->db->insert('tb_kategori', $data);
 		return ($this->db->affected_rows() != 1) ? false : true;
 	}
 	
 	function edit_kategori(){
 		$id_kategori= $this->input->post('id_kategori');
-
+		
 		$kategori 	= htmlspecialchars($this->input->post('kategori'), true);
 		$keterangan = htmlspecialchars($this->input->post('keterangan'), true);
 		
@@ -58,7 +58,7 @@ class M_admin extends CI_Model {
 			'kategori' 		=> $kategori,
 			'keterangan' 	=> $keterangan,
 		);
-
+		
 		$this->db->where('id_kategori', $id_kategori);
 		$this->db->update('tb_kategori', $data);
 		return ($this->db->affected_rows() != 1) ? false : true;
@@ -69,5 +69,101 @@ class M_admin extends CI_Model {
 		$this->db->delete('tb_kategori');
 		return ($this->db->affected_rows() != 1) ? false : true;
 	}
+	
+	// PRODUK
+	function get_produkTable($start, $limit){
+		$this->db->select('a.*, b.kategori');
+		$this->db->from('tb_produk a');
+		$this->db->join('tb_kategori b', 'a.id_kategori = b.id_kategori');
+		$this->db->limit($limit, $start);
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return false;
+		}
+		
+	}
 
+	function get_produkDetail($permalink){
+		$this->db->select('a.*, b.kategori');
+		$this->db->from('tb_produk a');
+		$this->db->join('tb_kategori b', 'a.id_kategori = b.id_kategori');
+		$this->db->where('permalink', $permalink);
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query->row();
+		} else {
+			return false;
+		}
+	}
+	
+	function count_produk(){
+		return $this->db->get('tb_produk')->num_rows();		
+	}
+
+	function cek_namaProduk($nama_produk){
+		$query = $this->db->query("SELECT * FROM tb_produk WHERE nama_produk = '$nama_produk'");
+		if ($query->num_rows() > 0) {
+			return false;
+		} else {
+			return true;
+		}
+		
+	}
+	
+	function produk_permalink($permalink){
+		$query = $this->db->query("SELECT * FROM tb_produk WHERE permalink = '$permalink'");
+		return $query->num_rows();
+		
+	}
+	
+	function proses_tambahProduk($permalink, $poster){
+		$nama_produk   	= $this->input->post('nama_produk');
+		$harga      		= $this->input->post('harga');
+		$kategori    		= $this->input->post('kategori');
+		$keterangan     = $this->input->post('keterangan');
+		
+		$data = array(
+			'permalink' 	=> $permalink,
+			'id_kategori' => $kategori,
+			'nama_produk' => $nama_produk,
+			'poster'      => $poster,
+			'keterangan'  => $keterangan,
+			'harga'       => $harga,
+			'tanggal'			=> date("Y-m-d")
+		);
+		
+		$this->db->insert('tb_produk', $data);
+		return ($this->db->affected_rows() != 1) ? false : true;
+	}
+	
+	function proses_editProduk($permalink, $poster){
+		$id_produk   		= $this->input->post('id_produk');
+
+		$nama_produk   	= $this->input->post('nama_produk');
+		$harga      		= $this->input->post('harga');
+		$kategori    		= $this->input->post('kategori');
+		$keterangan     = $this->input->post('keterangan');
+		
+		$data = array(
+			'permalink' 	=> $permalink,
+			'id_kategori' => $kategori,
+			'nama_produk' => $nama_produk,
+			'poster'      => $poster,
+			'keterangan'  => $keterangan,
+			'harga'       => $harga
+		);
+		
+		$this->db->where('id_produk', $id_produk);
+		$this->db->update('tb_produk', $data);
+		return ($this->db->affected_rows() != 1) ? false : true;
+	}
+	
+	function hapus_produk($id_produk){
+		$this->db->where('id_produk', $id_produk);
+		$this->db->delete('tb_produk');
+		return ($this->db->affected_rows() != 1) ? false : true;
+	}
+	
 }

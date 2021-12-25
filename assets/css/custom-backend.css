@@ -88,10 +88,6 @@ body {
 	box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
 
-/*
- * Utilities
- */
-
 .border-top {
 	border-top: 1px solid #e5e5e5;
 }
@@ -102,4 +98,54 @@ body {
 
 td {
 	white-space: nowrap;
+}
+
+/* SCROLL BAR */
+
+
+/* width */
+
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+	cursor: pointer;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	cursor: pointer;
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+	background: rgb(5, 121, 30);
+	opacity: 0.5;
+	cursor: pointer;
+}
+
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgb(5, 121, 30);
+	opacity: 0.9;
+	cursor: pointer !important;
+}
+
+/* select2 */
+.select2-container .select2-selection--single {
+	height: 38px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+	line-height: 38px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+	height: 38px !important;
 }

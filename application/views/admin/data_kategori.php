@@ -1,15 +1,19 @@
-<div class="row">
+<div class="row justify-content-between align-items-center">
+	<div class="col-md-12">
+		<h4 class="title">Data Kategori
+			<button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal"
+				data-target="#tambah-kategori">tambah kategori</button>
+		</h4>
+	</div>
+</div>
+<hr>
+
+<div class="row mt-2">
 	<div class="col-md-10">
 		<div class="card">
-			<div class="card-header">
-				<h4 class="card-header-title">Data kategori
-					<button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal"
-						data-target="#tambah-kategori">tambah kategori</button>
-				</h4>
-			</div>
 			<div class="card-body">
 				<div class="table-responsive mb-4">
-					<table class="table table-stripped table-nowrap">
+					<table class="table table-hover table-bordered table-nowrap">
 						<thead class="thead-light">
 							<tr>
 								<th>No</th>
@@ -24,7 +28,7 @@
 								<td colspan="4" class="text-center">belum ada data</td>
 							</tr>
 							<?php }else{?>
-							<?php $no = 1; foreach ($kategori as $key) {?>
+							<?php if(empty($this->uri->segment(2)) ? $no = 1 : $no = $this->uri->segment(2)+1); foreach ($kategori as $key) {?>
 							<tr>
 								<th><?= $no++;?></th>
 								<td>
@@ -76,10 +80,10 @@
 							<!-- Modal -->
 							<div class="modal fade" id="hapus-kategori-<?= $key->id_kategori;?>" tabindex="-1" role="dialog"
 								aria-labelledby="edit-kategori-<?= $key->id_kategori;?>" aria-hidden="true">
-								<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h5 class="modal-title" id="exampleModalLongTitle">Edit kategori</h5>
+											<h5 class="modal-title" id="exampleModalLongTitle">Hapus kategori</h5>
 											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 												<span aria-hidden="true">&times;</span>
 											</button>
