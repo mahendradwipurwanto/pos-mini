@@ -61,6 +61,7 @@
 								</label>
 								<input type="file" id="GETP_POSTER" class="form-control d-none" name="poster"
 									onchange="previewP_POSTER(this);" accept="image/*">
+									<input type="hidden" name="old_poster" value="<?= $produk->poster;?>">
 								<small class="text-muted">Max 2Mb size.</small>
 							</div>
 						</div>
@@ -137,5 +138,7 @@
 	setInputFilter(document.getElementById("InputHargaproduk"), function (value) {
 		return /^\d*$/.test(value);
 	});
+      
+	CKEDITOR.replace('ckeditor');
 
 </script>
