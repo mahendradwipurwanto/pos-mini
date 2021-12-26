@@ -137,5 +137,7 @@
 	setInputFilter(document.getElementById("InputHargaproduk"), function (value) {
 		return /^\d*$/.test(value);
 	});
+      
+	CKEDITOR.replace('ckeditor');
 
 </script>

@@ -20,12 +20,6 @@
       $(document).ready(function() {
           $('.select2').select2();
       });
-      
-      var ckeditor = CKEDITOR.replace('ckeditor');
-      ckeditor.on('required', function(evt) {
-          editor.showNotification('This field is required.', 'warning');
-          evt.cancel();
-      });
     </script>
   </body>
 </html>
