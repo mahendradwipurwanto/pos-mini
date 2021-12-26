@@ -7,8 +7,13 @@
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="">
-	<meta name="author" content="">
+  <meta property="og:title" content="<?= ($this->uri->segment(1) ? ucwords(str_replace('-', ' ', $this->uri->segment(1)).' '.($this->uri->segment(2) ? str_replace('-', ' ', $this->uri->segment(2)) : "")." - POS mini") : "POS mini");?>">
+  <meta property="og:description" content="POS Mini - PT. Majoo Teknologi Indonesia">
+  <meta property="og:image" content="<?= base_url();?>assets/img/logo.png">
+  <meta property="og:url" content="<?= base_url(uri_string()) ?>">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="<?= base_url() ?>assets/img/logo.png">
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="<?= base_url();?>assets/css/bootstrap.min.css">
@@ -26,6 +31,9 @@
 
   <!-- ckeditor -->
   <script src="<?= base_url('assets/js/plugin/ckeditor/ckeditor.js') ?>"></script>
+
+  <!-- jquery form plugin -->
+  <script src="<?= base_url('assets/js/plugin/jquery.form.js') ?>"></script>
 
   <!-- Sweetalert -->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

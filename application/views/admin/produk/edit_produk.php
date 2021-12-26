@@ -52,10 +52,16 @@
 							</div>
 						</div>
 						<div class="col-md-3 border-left">
-							<button type="submit" class="btn btn-info btn-block btn-sm" id="send-button">edit produk</button>
+							<button type="submit" class="btn btn-info btn-block btn-sm mb-4" id="send-button">edit produk</button>
 							<div class="form-group">
 								<label for="inputPosterproduk">Poster produk <small class="text-danger">*</small></label>
-								<input type="file" class="form-control" id="inputPosterproduk" name="poster" value="<?= $produk->poster;?>">
+								<label for="GETP_POSTER" class="upload-card mx-auto">
+									<img id="P_POSTER" class="upload-img w-100 P_POSTER cursor"
+										src="<?= base_url();?><?= $produk->poster == null ? 'assets/img/placeholder.png' : 'berkas/produk/'.$produk->permalink.'/'.$produk->poster;?>" alt="Placeholder">
+								</label>
+								<input type="file" id="GETP_POSTER" class="form-control d-none" name="poster"
+									onchange="previewP_POSTER(this);" accept="image/*">
+								<small class="text-muted">Max 2Mb size.</small>
 							</div>
 						</div>
 					</div>
@@ -76,6 +82,21 @@
 		);
 		return;
   });
+
+	function previewP_POSTER(input) {
+		$(".P_POSTER").removeClass('hidden');
+		var file = $("#GETP_POSTER").get(0).files[0];
+
+		if (file) {
+			var reader = new FileReader();
+
+			reader.onload = function () {
+				$("#P_POSTER").attr("src", reader.result);
+			}
+
+			reader.readAsDataURL(file);
+		}
+	}
   
 	$(document).ready(function () {
 		$("#inputNamaproduk").keydown(function (event) {

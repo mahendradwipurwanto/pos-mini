@@ -33,6 +33,15 @@ class M_admin extends CI_Model {
 	function count_kategori(){
 		return $this->db->get('tb_kategori')->num_rows();		
 	}
+
+	function cek_produkKategori($id_kategori){
+		$query = $this->db->get_where('tb_produk', array('id_kategori' => $id_kategori));
+		if ($query->num_rows() > 0) {
+			return $query->num_rows();
+		} else {
+			return false;
+		}
+	}
 	
 	// PROCESS KATEGORI
 	function tambah_kategori(){
@@ -84,7 +93,19 @@ class M_admin extends CI_Model {
 		}
 		
 	}
-
+	function get_produk(){
+		$this->db->select('a.*, b.kategori');
+		$this->db->from('tb_produk a');
+		$this->db->join('tb_kategori b', 'a.id_kategori = b.id_kategori');
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return false;
+		}
+		
+	}
+	
 	function get_produkDetail($permalink){
 		$this->db->select('a.*, b.kategori');
 		$this->db->from('tb_produk a');
@@ -101,9 +122,19 @@ class M_admin extends CI_Model {
 	function count_produk(){
 		return $this->db->get('tb_produk')->num_rows();		
 	}
-
+	
 	function cek_namaProduk($nama_produk){
 		$query = $this->db->query("SELECT * FROM tb_produk WHERE nama_produk = '$nama_produk'");
+		if ($query->num_rows() > 0) {
+			return false;
+		} else {
+			return true;
+		}
+		
+	}
+	
+	function cek_namaProdukEdit($id_produk, $nama_produk){
+		$query = $this->db->query("SELECT * FROM tb_produk WHERE id_produk != '$id_produk' AND nama_produk = '$nama_produk'");
 		if ($query->num_rows() > 0) {
 			return false;
 		} else {
@@ -140,20 +171,30 @@ class M_admin extends CI_Model {
 	
 	function proses_editProduk($permalink, $poster){
 		$id_produk   		= $this->input->post('id_produk');
-
+		
 		$nama_produk   	= $this->input->post('nama_produk');
 		$harga      		= $this->input->post('harga');
 		$kategori    		= $this->input->post('kategori');
 		$keterangan     = $this->input->post('keterangan');
 		
-		$data = array(
-			'permalink' 	=> $permalink,
-			'id_kategori' => $kategori,
-			'nama_produk' => $nama_produk,
-			'poster'      => $poster,
-			'keterangan'  => $keterangan,
-			'harga'       => $harga
-		);
+		if ($poster == null) {
+			$data = array(
+				'permalink' 	=> $permalink,
+				'id_kategori' => $kategori,
+				'nama_produk' => $nama_produk,
+				'keterangan'  => $keterangan,
+				'harga'       => $harga
+			);
+		} else {
+			$data = array(
+				'permalink' 	=> $permalink,
+				'id_kategori' => $kategori,
+				'nama_produk' => $nama_produk,
+				'poster'      => $poster,
+				'keterangan'  => $keterangan,
+				'harga'       => $harga
+			);
+		}
 		
 		$this->db->where('id_produk', $id_produk);
 		$this->db->update('tb_produk', $data);
