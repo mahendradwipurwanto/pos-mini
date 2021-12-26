@@ -191,14 +191,9 @@ class Admin extends CI_Controller {
 				$uniqid = "";
 				
 				$word   = preg_replace("/[^a-zA-Z0-9]+/", "-", $this->input->post('nama_produk'));
-				$word   = strtolower($word);
+
 				// genereate permalink
-				do {
-					for ($i = 0; $i < 4; $i++){
-						$uniqid     .= $chars[mt_rand(0, strlen($chars)-1)];
-						$permalink 	 = strtolower($word.'-'.$uniqid);
-					}
-				} while ($this->M_admin->produk_permalink($permalink) > 0);
+				$permalink 	 = strtolower($word);
 				
 				if (!empty($_FILES['poster']['name']))
 				{
@@ -212,7 +207,11 @@ class Admin extends CI_Controller {
 					}
 					
 					// set file name
-					$string_file = strtolower("poster_".substr(time(), 0, 3));
+					for ($i = 0; $i < 4; $i++){
+						$uniqid     .= $chars[mt_rand(0, strlen($chars)-1)];
+					}
+
+					$string_file = strtolower("poster_{$uniqid}");
 					
 					$config['upload_path']          = $folder;
 					$config['allowed_types']        = '*';
@@ -283,14 +282,8 @@ class Admin extends CI_Controller {
 				$uniqid = "";
 				
 				$word   = preg_replace("/[^a-zA-Z0-9]+/", "-", $this->input->post('nama_produk'));
-				$word   = strtolower($word);
 				// genereate permalink
-				do {
-					for ($i = 0; $i < 4; $i++){
-						$uniqid     .= $chars[mt_rand(0, strlen($chars)-1)];
-						$permalink 	 = strtolower($word.'-'.$uniqid);
-					}
-				} while ($this->M_admin->produk_permalink($permalink) > 0);
+				$permalink 	 = strtolower($word);
 				
 				if (!empty($_FILES['poster']['name']))
 				{
@@ -299,9 +292,10 @@ class Admin extends CI_Controller {
 					$folder 			= "berkas/produk/{$permalink}";
 					
 					// delete older poster
-					$file 				= "berkas/produk/{$permalink_old}";
+					$poster 			= $this->input->post('old_poster');
+					$file 				= "berkas/produk/{$permalink_old}/{$poster}";
 					
-					delete_files($file, TRUE);
+					unlink($file);
 					
 					// cek if folder di exist, is not make new folder
 					if (!is_dir($folder)) {
@@ -309,7 +303,11 @@ class Admin extends CI_Controller {
 					}
 					
 					// set file name
-					$string_file = strtolower("poster_".substr(time(), 0, 3));
+					for ($i = 0; $i < 4; $i++){
+						$uniqid     .= $chars[mt_rand(0, strlen($chars)-1)];
+					}
+
+					$string_file = strtolower("poster_{$uniqid}");
 					
 					$config['upload_path']          = $folder;
 					$config['allowed_types']        = '*';
@@ -329,17 +327,17 @@ class Admin extends CI_Controller {
 							$this->session->set_flashdata('success', 'Berhasil mengubah data produk !');
 							redirect(site_url('produk'));
 						}else{
-							$this->session->set_flashdata('error', 'Terjadi kesalahan saat tidak terjadi perubahan data produk !');
+							$this->session->set_flashdata('warning', 'Tidak terjadi perubahan data produk !');
 							redirect(site_url('edit-produk/'.$permalink_old));
 						}
 					}
 					
 				}else{
-					if ($this->M_admin->proses_editProduk($permalink, null) == TRUE){
+					if ($this->M_admin->proses_editProduk($permalink_old, null) == TRUE){
 						$this->session->set_flashdata('success', 'Berhasil mengubah data produk !');
 						redirect(site_url('produk'));
 					}else{
-						$this->session->set_flashdata('error', 'Terjadi kesalahan saat tidak terjadi perubahan data produk !');
+						$this->session->set_flashdata('warning', 'Tidak terjadi perubahan data produk !');
 						redirect(site_url('edit-produk/'.$permalink_old));
 					}
 				}
@@ -349,12 +347,12 @@ class Admin extends CI_Controller {
 		}
 	}
 	
-	function hapus_produk($permalink = null, $id_produk = null){
+	function hapus_produk($permalink = null, $poster = null, $id_produk = null){
 		if ($this->M_admin->hapus_produk($id_produk) == TRUE){
 			// delete older poster
-			$file 				= "berkas/produk/{$permalink}";
+			$file 				= "berkas/produk/{$permalink}/{$poster}";
 			
-			delete_files($file, TRUE);
+			unlink($file);
 			$this->session->set_flashdata('success', 'Berhasil menghapus produk !');
 			redirect($this->agent->referrer());
 		}else{
