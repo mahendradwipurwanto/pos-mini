@@ -6,9 +6,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '103.160.212.218',
-	'username' => 'nestivent_main',
-	'password' => '+nXUrUK~+]l,',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => '',
 	'database' => 'nestivent_majoo',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
