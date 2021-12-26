@@ -23,7 +23,9 @@ class Admin extends CI_Controller {
 	
 	public function index()
 	{
-		$this->template_backend->view('admin/dashboard');
+		$data['count_produk']			= $this->M_admin->count_produk();
+		$data['count_kategori']		= $this->M_admin->count_kategori();
+		$this->template_backend->view('admin/dashboard', $data);
 	}
 	
 	// KATEGORI
@@ -81,12 +83,24 @@ class Admin extends CI_Controller {
 	}
 	
 	function hapus_kategori($id_kategori = null){
-		if ($this->M_admin->hapus_kategori($id_kategori) == TRUE){
-			$this->session->set_flashdata('success', 'Berhasil menghapus kategori !');
+		
+		// check if there is a produk using this kategori
+		if ($this->M_admin->cek_produkKategori($id_kategori) != false) {
+			
+			$produk = $this->M_admin->cek_produkKategori($id_kategori);
+
+			$this->session->set_flashdata('warning', 'Anda tidak dapat menghapus kategori ini, karena '.$produk.' menggunakan ketegori ini !');
 			redirect($this->agent->referrer());
-		}else{
-			$this->session->set_flashdata('error', 'Terjadi kesalahan saat menghapus kategori !');
-			redirect($this->agent->referrer());
+			
+			// continue proccess
+		} else {
+			if ($this->M_admin->hapus_kategori($id_kategori) == TRUE){
+				$this->session->set_flashdata('success', 'Berhasil menghapus kategori !');
+				redirect($this->agent->referrer());
+			}else{
+				$this->session->set_flashdata('error', 'Terjadi kesalahan saat menghapus kategori !');
+				redirect($this->agent->referrer());
+			}
 		}
 	}
 	
@@ -147,16 +161,16 @@ class Admin extends CI_Controller {
 	public function proses_tambahProduk(){
 		
 		// set validation rules
-		$this->form_validation->set_rules('nama_produk', 'inputNamaproduk', 'required');
-		$this->form_validation->set_rules('harga', 'InputHargaproduk', 'required');
-		$this->form_validation->set_rules('kategori', 'inputkategoriproduk', 'required');
-		$this->form_validation->set_rules('keterangan', 'ckeditor', 'required');
+		$this->form_validation->set_rules('nama_produk', 'Nama produk', 'required');
+		$this->form_validation->set_rules('harga', 'Harga produk', 'required');
+		$this->form_validation->set_rules('kategori', 'Kategori', 'required');
+		$this->form_validation->set_rules('keterangan', 'Keterangan', 'required');
 		
 		// cek form validaiton
 		if ($this->form_validation->run() == FALSE){
 			
 			// redirect previous page
-			$this->session->set_flashdata('warning', 'Harap lengkapi semua data');
+			$this->session->set_flashdata('warning', 'Harap lengkapi semua data !');
 			redirect(site_url('tambah-produk'));
 			
 			// continued proccess
@@ -165,7 +179,7 @@ class Admin extends CI_Controller {
 			if ($this->M_admin->cek_namaProduk($this->input->post('nama_produk')) == false) {
 				
 				// redirect previous page
-				$this->session->set_flashdata('warning', 'Harap lengkapi semua data');
+				$this->session->set_flashdata('warning', 'Nama produk telah ada !');
 				redirect(site_url('tambah-produk'));
 				
 				// continued proccess
@@ -190,7 +204,7 @@ class Admin extends CI_Controller {
 				{
 					
 					// setting dir upload poster
-					$folder 			= "berkas/produk/{$permalink}/";
+					$folder 			= "berkas/produk/{$permalink}";
 					
 					// cek if folder di exist, is not make new folder
 					if (!is_dir($folder)) {
@@ -202,7 +216,7 @@ class Admin extends CI_Controller {
 					
 					$config['upload_path']          = $folder;
 					$config['allowed_types']        = '*';
-					$config['max_size']             = 10*1024;
+					$config['max_size']             = 2*1024;
 					$config['overwrite']            = true;
 					$config['file_name']            = $string_file;
 					
@@ -239,10 +253,10 @@ class Admin extends CI_Controller {
 		$permalink_old = $this->input->post('permalink');
 		
 		// set validation rules
-		$this->form_validation->set_rules('nama_produk', 'inputNamaproduk', 'required');
-		$this->form_validation->set_rules('harga', 'InputHargaproduk', 'required');
-		$this->form_validation->set_rules('kategori', 'inputkategoriproduk', 'required');
-		$this->form_validation->set_rules('keterangan', 'ckeditor', 'required');
+		$this->form_validation->set_rules('nama_produk', 'Nama produk', 'required');
+		$this->form_validation->set_rules('harga', 'Harga produk', 'required');
+		$this->form_validation->set_rules('kategori', 'Kategori', 'required');
+		$this->form_validation->set_rules('keterangan', 'Keterangan', 'required');
 		
 		// cek form validaiton
 		if ($this->form_validation->run() == FALSE){
@@ -253,11 +267,11 @@ class Admin extends CI_Controller {
 			
 			// continued proccess
 		}else{
-			// cek uniqe nama produk
-			if ($this->M_admin->cek_namaProduk($this->input->post('nama_produk')) == false) {
+			// cek uniqe nama produk with param id produk
+			if ($this->M_admin->cek_namaProdukEdit($this->input->post('id_produk'), $this->input->post('nama_produk')) == false) {
 				
 				// redirect previous page
-				$this->session->set_flashdata('warning', 'Harap lengkapi semua data');
+				$this->session->set_flashdata('warning', 'Nama produk telah ada !');
 				redirect(site_url('edit-produk/'.$permalink_old));
 				
 				// continued proccess
@@ -282,7 +296,12 @@ class Admin extends CI_Controller {
 				{
 					
 					// setting dir upload poster
-					$folder 			= "berkas/produk/{$permalink}/";
+					$folder 			= "berkas/produk/{$permalink}";
+					
+					// delete older poster
+					$file 				= "berkas/produk/{$permalink_old}";
+					
+					delete_files($file, TRUE);
 					
 					// cek if folder di exist, is not make new folder
 					if (!is_dir($folder)) {
@@ -294,7 +313,7 @@ class Admin extends CI_Controller {
 					
 					$config['upload_path']          = $folder;
 					$config['allowed_types']        = '*';
-					$config['max_size']             = 10*1024;
+					$config['max_size']             = 2*1024;
 					$config['overwrite']            = true;
 					$config['file_name']            = $string_file;
 					
@@ -330,8 +349,12 @@ class Admin extends CI_Controller {
 		}
 	}
 	
-	function hapus_produk($id_produk = null){
+	function hapus_produk($permalink = null, $id_produk = null){
 		if ($this->M_admin->hapus_produk($id_produk) == TRUE){
+			// delete older poster
+			$file 				= "berkas/produk/{$permalink}";
+			
+			delete_files($file, TRUE);
 			$this->session->set_flashdata('success', 'Berhasil menghapus produk !');
 			redirect($this->agent->referrer());
 		}else{

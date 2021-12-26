@@ -8,8 +8,13 @@
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="">
-	<meta name="author" content="">
+  <meta property="og:title" content="<?= ($this->uri->segment(1) ? ucwords(str_replace('-', ' ', $this->uri->segment(1)).' '.($this->uri->segment(2) ? str_replace('-', ' ', $this->uri->segment(2)) : "")." - POS mini") : "POS mini");?>">
+  <meta property="og:description" content="POS Mini - PT. Majoo Teknologi Indonesia">
+  <meta property="og:image" content="<?= base_url();?>assets/img/logo.png">
+  <meta property="og:url" content="<?= base_url(uri_string()) ?>">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="<?= base_url() ?>assets/img/logo.png">
 
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 

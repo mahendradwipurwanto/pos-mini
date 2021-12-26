@@ -8,6 +8,28 @@ body {
 	vertical-align: text-bottom;
 }
 
+/* UPLOAD IMG */
+
+
+.upload-card {
+	width: 200px;
+	height: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+
+.upload-card:hover {
+	cursor: pointer;
+}
+
+.upload-img {
+	flex-shrink: 0;
+	min-width: 100%;
+	min-height: 100%;
+}
+
 /*
  * Sidebar
  */

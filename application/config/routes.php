@@ -11,6 +11,7 @@ $route['kategori']            = 'admin/data_kategori';
 $route['kategori/(:num)']     = 'admin/data_kategori';
 
 $route['produk']              = 'admin/data_produk';
+$route['produk/(:num)']       = 'admin/data_produk';
 $route['tambah-produk']       = 'admin/tambah_produk';
 $route['edit-produk/(:any)']  = 'admin/edit_produk/$1';
 

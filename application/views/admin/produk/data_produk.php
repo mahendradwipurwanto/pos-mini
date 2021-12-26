@@ -54,7 +54,7 @@
 											</button>
 										</div>
 										<div class="modal-body">
-											<form action="<?= site_url('admin/hapus_produk/'.$key->id_produk);?>" method="post">
+											<form action="<?= site_url('admin/hapus_produk/'.$key->permalink.'/'.$key->id_produk);?>" method="post">
 												<p>Apakah anda yakin ingin menghapus produk, <b><?= $key->nama_produk;?></b>? </p>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Batal</button>

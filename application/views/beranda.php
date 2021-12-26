@@ -64,11 +64,6 @@
 			</div>
 			<?php }?>
 			<?php }?>
-
-			<?php if($produk != false){?>
-			<?= $this->pagination->create_links(); ?>
-			<?php }?>
-
 		</div>
 
 	</div>
